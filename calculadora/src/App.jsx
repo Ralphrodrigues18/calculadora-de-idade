@@ -11,47 +11,73 @@ export default function App() {
   const calculateAge = () => {
     setError("");
     const birthDate = new Date(`${year}-${month}-${day}`);
+
+    // Verifica se a data é inválida ou está no futuro
     if (isNaN(birthDate.getTime()) || birthDate > new Date()) {
       setError("Data inválida. Insira uma data válida no passado.");
       return;
     }
-
+    //calcula a diferença entre a data de hj e a data de nascimento
     const today = new Date();
     let years = today.getFullYear() - birthDate.getFullYear();
     let months = today.getMonth() - birthDate.getMonth();
     let days = today.getDate() - birthDate.getDate();
 
+    //se o dia de hj for menor que o dia de nascimento
+    //subtrai 1 mês e soma a quantidade de dias do mês anterior
+    
     if (days < 0) {
       months--;
       const prevMonth = new Date(today.getFullYear(), today.getMonth(), 0);
       days += prevMonth.getDate();
     }
+    //se o mês de hj for menor que o mês de nascimento subtrai 1 ano e soma 12 meses
     if (months < 0) {
       years--;
       months += 12;
     }
+    // guarda o valor final
     setAge({ years, months, days });
   };
 
   return (
-    <div className="flex flex-col items-center p-6 bg-gray-100 min-h-screen">
-      <div className="bg-white p-6 rounded-2xl shadow-lg max-w-sm w-full">
-        <h2 className="text-xl font-bold mb-4 text-center">Calculadora de Idade</h2>
-        <div className="flex space-x-2">
-          <input type="number" placeholder="Dia" className="border p-2 w-1/3" value={day} onChange={(e) => setDay(e.target.value)} />
-          <input type="number" placeholder="Mês" className="border p-2 w-1/3" value={month} onChange={(e) => setMonth(e.target.value)} />
-          <input type="number" placeholder="Ano" className="border p-2 w-1/3" value={year} onChange={(e) => setYear(e.target.value)} />
-        </div>
-        {error && <p className="text-red-500 mt-2 text-center">{error}</p>}
-        <button className="mt-4 bg-blue-500 text-white p-2 w-full rounded" onClick={calculateAge}>Calcular</button>
-        {age && (
-          <div className="mt-4 text-center">
-            <p><strong>{age.years}</strong> anos</p>
-            <p><strong>{age.months}</strong> meses</p>
-            <p><strong>{age.days}</strong> dias</p>
-          </div>
-        )}
+    <div className="app">
+      <h2>Calculadora de Idade</h2>
+      <div className="form">
+        <input
+          type="number"
+          placeholder="Dia"
+          value={day}
+          onChange={(e) => setDay(e.target.value)}
+        />
+        <input
+          type="number"
+          placeholder="Mês"
+          value={month}
+          onChange={(e) => setMonth(e.target.value)}
+        />
+        <input
+          type="number"
+          placeholder="Ano"
+          value={year}
+          onChange={(e) => setYear(e.target.value)}
+        />
+        {error && <p className="error">{error}</p>}
+        <button onClick={calculateAge}>Calcular</button>
       </div>
+      {age && (
+        <div className="result">
+          <p>
+            <strong>{age.years}</strong> anos
+          </p>
+          <p>
+            <strong>{age.months}</strong> meses
+          </p>
+          <p>
+            <strong>{age.days}</strong> dias
+          </p>
+        </div>
+      )}
     </div>
   );
 }
