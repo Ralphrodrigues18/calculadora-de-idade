@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./index.css";
 
+
 export default function App() {
   const [day, setDay] = useState("");
   const [month, setMonth] = useState("");
@@ -11,7 +12,7 @@ export default function App() {
   const calculateAge = () => {
     setError("");
     
-    // Basic validation
+    //valida se todos os campos foram preenchidos
     if (!day || !month || !year) {
       setError("Por favor, preencha todos os campos");
       return;
@@ -20,23 +21,24 @@ export default function App() {
     const birthDate = new Date(year, month - 1, day);
     const today = new Date();
 
-    // Validation: invalid date or future date
+    //valida se a data de nascimento é válida ou no futuro
     if (birthDate > today || isNaN(birthDate.getTime())) {
       setError("Data inválida. Insira uma data válida no passado.");
       return;
     }
 
-    // Age calculation
+    //faz a diferença da data de nascimento com a data de hoje
     let years = today.getFullYear() - birthDate.getFullYear();
     let months = today.getMonth() - birthDate.getMonth();
     let days = today.getDate() - birthDate.getDate();
 
-    // Adjust months and days if necessary
+    //corrige a idade se o dia de nascimento for maior que o dia de hoje
     if (days < 0) {
       months--;
       const previousMonth = new Date(today.getFullYear(), today.getMonth(), 0);
       days += previousMonth.getDate();
     }
+    //corrige a idade se o mês de nascimento for maior que o mês de hoje
     if (months < 0) {
       years--;
       months += 12;
